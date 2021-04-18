@@ -1,12 +1,14 @@
-const { app, BrowserWindow, Notification } = require('electron');
+const { app, BrowserWindow, Notification, ipcMain } = require('electron');
 const path = require('path');
+const showNotification = require('./notification/main');
+
 let win;
 function createWindow() {
     win = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
-            preload: path.join(__dirname, 'preload.js'),
+            preload: path.join(__dirname, 'preload.js'), // 预加载脚本
             nodeIntegration: true,
         },
     });
@@ -15,49 +17,41 @@ function createWindow() {
     win.webContents.openDevTools();
 }
 
-function showNotification() {
-    const options = {
-        title: '通知',
-        body: '来自主进程的通知',
-        // actions: [{ type: 'button', text: '确定'}, { type: 'button', text: '知道了'}],
-        actions: [{ type: 'button', text: '知道了'}, { type: 'button', text: '确定'}],
-        closeButtonText: '关闭',
-    };
-    const notification = new Notification(options);
 
-    // 注意这些信息是主进程的，因此日志信息是打印在命令行内的
-    // 渲染进程的日志 才会输出在应用控制台
-    notification.on('click', (event, arg) => {
-        console.log('click>>>>', event, arg);
-    })
 
-    notification.on('close', (event, arg) => {
-        console.log('close>>>>', event, arg);
-    })
+async function main() {
+    await app.whenReady();
 
-    notification.on('action', (event, index) => {
-        console.log('action>>>>', event, index);
+    createWindow();
+
+    // 程序激活后没有可见窗口 才创建新的窗口
+    // 首次启动或者重启
+    app.on('activate', () => {
+        if (BrowserWindow.getAllWindows().length === 0) {
+            createWindow();
+        }
+    });
+
+    // 程序没有任何打开的窗口的时候 尝试退出
+    app.on('window-all-closed', () => {
+        // macos 无效  macos判断方式
+        if (process.platform !== 'darwin') {
+            app.quit();
+        }
+    });
+    app.addRecentDocument('./README.md');
+
+    // 回调函数的返回值 传递给渲染进程调用方
+    ipcMain.handle('platform-action', async (event, args) => {
+        // 主进程唤起notification
+        const opts = {
+            title: 'hello title'
+        };
+        return await showNotification(Notification, opts);
     })
-    notification.show();
 }
+main();
 
-app.whenReady()
-    .then(() => {
-        createWindow();
 
-        app.on('activate', () => {
-            if (BrowserWindow.getAllWindows().length === 0) {
-                createWindow();
-            }
-        });
-    })
-    .then(showNotification);
 
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
-});
 
-app
-app.addRecentDocument('./README.md');

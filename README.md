@@ -2,6 +2,15 @@
 
 # FEATURES
 
+## init
+初始化app
+
+1. app ready之后 开始创建窗口
+2. createWindow
+    + loadFile
+    + webPreferences preload 预加载js脚本[在前]
+    + index.html 文件中使用`script`标签引入的脚本[在后]
+
 ## Notification
 
 为应用程序添加通知信息
