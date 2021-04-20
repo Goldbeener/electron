@@ -4,7 +4,7 @@ function showNotification(Notification, opts) {
             title: '通知',
             body: '来自主进程的通知',
             actions: [ //参数类型是list 但是在macos只有第一个参数有效
-                { type: 'button', text: '知道了'}, 
+                { type: 'button', text: '收到2'}, 
                 { type: 'button', text: '确定'}
             ], 
             closeButtonText: '关闭',

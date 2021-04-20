@@ -5,14 +5,32 @@
 ## init
 初始化app
 
+### 初始化
 1. app ready之后 开始创建窗口
 2. createWindow
     + loadFile
     + webPreferences preload 预加载js脚本[在前]
     + index.html 文件中使用`script`标签引入的脚本[在后]
 
-## Notification
+### 通信
+`ipcMain` `ipcRenderer`
+1. 主进程与渲染进程通信
+2. 渲染进程与主进程通信
+3. 渲染进程与渲染进程通信
 
+
+#### 渲染进程与主进程
+```js
+// renderer
+const { ipcRenderer } = require('electron');
+
+ipcRenderer.send('event-name', params);
+ipcRenderer.sendSync('event-name', params);
+
+// 
+```
+
+## Notification
 为应用程序添加通知信息
 
 ### 渲染进程添加
@@ -28,3 +46,7 @@
 `app.addRecentDocument('path/to/file')`
 
 在 docker 菜单中展示可以最近使用的文件，并且可以快速跳转
+
+## 进程通信
+ipcRender
+ipcMain

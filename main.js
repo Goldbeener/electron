@@ -1,6 +1,7 @@
 const { app, BrowserWindow, Notification, ipcMain } = require('electron');
 const path = require('path');
-const showNotification = require('./notification/main');
+const showNotification = require('./notification');
+require('./ipc/main');
 
 let win;
 function createWindow() {
@@ -10,6 +11,8 @@ function createWindow() {
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'), // 预加载脚本
             nodeIntegration: true,
+            contextIsolation: false,
+            enableRemoteModule: true,
         },
     });
 
