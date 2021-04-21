@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Notification, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const showNotification = require('./notification');
 require('./ipc/main');
@@ -6,7 +6,7 @@ require('./ipc/main');
 let win;
 function createWindow() {
     win = new BrowserWindow({
-        width: 800,
+        width: 900,
         height: 600,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'), // 预加载脚本
@@ -45,12 +45,21 @@ async function main() {
     app.addRecentDocument('./README.md');
 
     // 回调函数的返回值 传递给渲染进程调用方
-    ipcMain.handle('platform-action', async (event, args) => {
+    ipcMain.handle('platform-action-fb', async (event, args) => {
         // 主进程唤起notification
         const opts = {
             title: 'hello title'
         };
-        return await showNotification(Notification, opts);
+
+        return await showNotification(opts);
+    })
+
+    // 回调函数的返回值 传递给渲染进程调用方
+    ipcMain.handle('platform-action', async (event, args) => {
+        // 主进程做画面捕获
+        return await desktopCapturer.getSources({
+            types: ['window', 'screen'],
+        })
     })
 }
 main();

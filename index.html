@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <title>Hello World!</title>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <style>
+        #video {
+            width: 200px;
+            height: 200px;
+        }
+    </style>
 </head>
 
 <body style="background: white;">
@@ -17,8 +23,10 @@
     </p>
     <p>Hello electron</p>
     <button id="btn">ipc 通知</button>
+    <video id="video"></video>
 
     <script src="./ipc/renderer.js"></script>
+    <script src="./capture/desktop-capture.js"></script>
 </body>
 
 </html>

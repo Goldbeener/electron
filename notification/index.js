@@ -1,4 +1,5 @@
-function showNotification(Notification, opts) {
+const { Notification } = require('electron');
+function showNotification(opts) {
     const res = new Promise((resolve, reject) => {
         const options = {
             title: '通知',

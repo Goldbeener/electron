@@ -19,16 +19,57 @@
 3. 渲染进程与渲染进程通信
 
 
-#### 渲染进程与主进程
+#### 渲染进程向主进程
 ```js
+/** send & on **/
+
 // renderer
 const { ipcRenderer } = require('electron');
 
-ipcRenderer.send('event-name', params);
-ipcRenderer.sendSync('event-name', params);
+// 同步返回值是 可以直接获取到主进程的响应值
+ipcRenderer.sendSync('sync-event-name', params);
 
-// 
+// 异步的返回值 还需要监听主进程的返回事件
+// 有点回调风格的写法
+ipcRenderer.send('async-event-name', params);
+ipcRenderer.on('sync-event-reply', (event, args) => {
+
+})
+
+
+// main
+const { ipcMain } = require('electron');
+
+ipcMain.on('sync-event-name', (eventm ...params) => {
+    event.returnValue = response;
+})
+
+ipcMain.on('async-event-name', (event, ...params) => {
+    event.reply('async-event-reply', response);
+})
+
+
+/** invoke & handle **/
+
+// renderer
+const { ipcRenderer } = require('electron');
+ipcRenderer
+    .invoke('async-event-name', 'params')
+    .then(res => {
+        // response from the main
+    })
+
+// ipcMain
+const { ipcMain } = require('electron');
+ipcMain.handle('async-event-name', async (event, args) => {
+    // 返回值是一个promise
+    const result = await doSomeAsyncWork();
+    return result
+})
+
 ```
+
+#### 主进程向渲染进程
 
 ## Notification
 为应用程序添加通知信息

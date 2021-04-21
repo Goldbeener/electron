@@ -8,4 +8,5 @@ ipcRenderer.on('async-reply', (event, args) => {
 })
 
 ipcRenderer.send('async-message', 'ping-async', 'ping2-async');
+console.log('>>> 这个应该在异步响应之前');
 
