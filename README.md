@@ -88,6 +88,10 @@ ipcMain.handle('async-event-name', async (event, args) => {
 
 在 docker 菜单中展示可以最近使用的文件，并且可以快速跳转
 
-## 进程通信
-ipcRender
-ipcMain
+## 桌面捕获
+### 屏幕分享
+关键: 捕获到需要分享的窗口，将视频流分享出去
+### 远程协作
+关键：
+    1. 屏幕分享
+    2. 协作者对屏幕的操作

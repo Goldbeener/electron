@@ -20,8 +20,6 @@ function createWindow() {
     win.webContents.openDevTools();
 }
 
-
-
 async function main() {
     await app.whenReady();
 
@@ -48,22 +46,18 @@ async function main() {
     ipcMain.handle('platform-action-fb', async (event, args) => {
         // 主进程唤起notification
         const opts = {
-            title: 'hello title'
+            title: 'hello title',
         };
 
         return await showNotification(opts);
-    })
+    });
 
     // 回调函数的返回值 传递给渲染进程调用方
     ipcMain.handle('platform-action', async (event, args) => {
         // 主进程做画面捕获
         return await desktopCapturer.getSources({
             types: ['window', 'screen'],
-        })
-    })
+        });
+    });
 }
 main();
-
-
-
-

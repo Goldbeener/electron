@@ -2,7 +2,7 @@
 // 其中注入了一些全局变量 例如 process
 // 在程序网页加载的时候 预加载，可以做一些处理
 
-const { ipcRenderer } = require('electron'); 
+const { ipcRenderer } = require('electron');
 
 window.addEventListener('DOMContentLoaded', () => {
     const replaceText = (selector, text) => {
@@ -16,10 +16,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const oBtn = document.getElementById('btn');
     oBtn.addEventListener('click', async () => {
-        ipcRenderer
-            .invoke('platform-action', 'asss')
-            .then(async (sources) => {
-                consoel.log('>>>> sources', sources);
-            })        
-    })
-}); 
+        ipcRenderer.invoke('platform-action', 'asss').then(async (sources) => {
+            consoel.log('>>>> sources', sources);
+        });
+    });
+});
